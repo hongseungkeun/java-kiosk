@@ -10,27 +10,27 @@ public class OutputConsole {
     private OutputConsole() {
     }
 
-    public static void printMainMenu() {
-        OutputConsole.printlnMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.MAIN_MENU + RIGHT_SQUARE_BRACKET);
+    public static void displayMainMenu() {
+        OutputConsole.displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.MAIN_MENU + RIGHT_SQUARE_BRACKET);
     }
 
-    public static void printCategoryMenu(String category) {
-        OutputConsole.printlnMessage(LEFT_SQUARE_BRACKET + category.toUpperCase() + ConsoleMessage.MENU + RIGHT_SQUARE_BRACKET);
+    public static void displayCategoryMenu(String category) {
+        OutputConsole.displayMessage(LEFT_SQUARE_BRACKET + category.toUpperCase() + ConsoleMessage.MENU + RIGHT_SQUARE_BRACKET);
     }
 
-    public static void printCategory(int index, Menu menu) {
-        OutputConsole.printlnMessage(index + DOT + menu.category());
+    public static void displayCategory(int index, Menu menu) {
+        OutputConsole.displayMessage(index + DOT + menu.category());
     }
 
-    public static void printMenuItem(int index, String name, double price, String description) {
-        OutputConsole.printlnMessage(index + ". " + name + "\t| W " + price + " | " + description);
+    public static void displayMenuItem(int index, String name, double price, String description) {
+        OutputConsole.displayMessage(index + ". " + name + "\t| W " + price + " | " + description);
     }
 
-    public static void printChooseMenu(String name, double price, String description) {
-        OutputConsole.printlnMessage(ConsoleMessage.CHOOSE_MENU + name + " | W " + price + " | " + description);
+    public static void displayChooseMenu(String name, double price, String description) {
+        OutputConsole.displayMessage(ConsoleMessage.CHOOSE_MENU + name + " | W " + price + " | " + description);
     }
 
-    public static void printlnMessage(String message) {
+    public static void displayMessage(String message) {
         System.out.println(message);
     }
 }
