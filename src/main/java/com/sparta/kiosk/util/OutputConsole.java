@@ -6,6 +6,8 @@ public class OutputConsole {
     private static final String LEFT_SQUARE_BRACKET = "[ ";
     private static final String RIGHT_SQUARE_BRACKET = " ]";
     private static final String DOT = ". ";
+    private static final String PRICE_SEPARATOR = "\t| W ";
+    private static final String ITEM_SEPARATOR = " | ";
 
     private OutputConsole() {
     }
@@ -23,11 +25,11 @@ public class OutputConsole {
     }
 
     public static void displayMenuItem(int index, String name, double price, String description) {
-        OutputConsole.displayMessage(index + ". " + name + "\t| W " + price + " | " + description);
+        OutputConsole.displayMessage(index + DOT + name + PRICE_SEPARATOR + price + ITEM_SEPARATOR + description);
     }
 
     public static void displayChooseMenu(String name, double price, String description) {
-        OutputConsole.displayMessage(ConsoleMessage.CHOOSE_MENU + name + " | W " + price + " | " + description);
+        OutputConsole.displayMessage(ConsoleMessage.CHOOSE_MENU + name + PRICE_SEPARATOR + price + ITEM_SEPARATOR + description);
     }
 
     public static void displayMessage(String message) {
