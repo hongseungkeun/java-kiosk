@@ -8,7 +8,7 @@ public class InputConsole {
     private InputConsole() {
     }
 
-    public static int choose() {
-        return sc.nextInt();
+    public static String choose() {
+        return sc.nextLine();
     }
 }

@@ -2,11 +2,11 @@ package com.sparta.kiosk.service;
 
 import com.sparta.kiosk.domain.Menu;
 import com.sparta.kiosk.domain.MenuItem;
+import com.sparta.kiosk.exception.ExceptionMessage;
 import com.sparta.kiosk.util.ConsoleMessage;
 import com.sparta.kiosk.util.InputConsole;
 import com.sparta.kiosk.util.OutputConsole;
 
-import java.util.InputMismatchException;
 import java.util.List;
 
 public class Kiosk {
@@ -29,7 +29,7 @@ public class Kiosk {
             OutputConsole.displayMessage(ConsoleMessage.EXIT);
 
             try {
-                int chooseNum = InputConsole.choose();
+                int chooseNum = Integer.parseInt(InputConsole.choose());
 
                 if (chooseNum == EXIT_CODE) {
                     OutputConsole.displayMessage(ConsoleMessage.EXIT_PROGRAM);
@@ -45,7 +45,7 @@ public class Kiosk {
                 }
 
                 OutputConsole.displayMessage(ConsoleMessage.GO_BACK);
-                chooseNum = InputConsole.choose();
+                chooseNum = Integer.parseInt(InputConsole.choose());
 
                 if (chooseNum == GO_BACK_CODE) {
                     continue;
@@ -54,10 +54,8 @@ public class Kiosk {
                 MenuItem menuItem = menu.menuItems().get(chooseNum - 1);
                 OutputConsole.displayChooseMenu(menuItem.name(), menuItem.price(), menuItem.description());
 
-            } catch (IndexOutOfBoundsException e) {
-                System.out.println("선택하신 숫자는 없는 숫자입니다.");
-            } catch (InputMismatchException e) {
-                System.out.println("숫자만 입력해주세요.");
+            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                OutputConsole.displayMessage(ExceptionMessage.NON_CORRESPONDING_NUM);
             }
         }
     }
