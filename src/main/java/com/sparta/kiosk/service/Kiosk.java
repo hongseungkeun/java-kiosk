@@ -20,43 +20,56 @@ public class Kiosk {
 
     public void start() {
         while (true) {
-            OutputConsole.displayMainMenu();
-
-            for (int i = 0; i < menus.size(); i++) {
-                OutputConsole.displayCategory(i + 1, menus.get(i));
-            }
-
-            OutputConsole.displayMessage(ConsoleMessage.EXIT);
+            printMainMenu();
 
             try {
-                int chooseNum = Integer.parseInt(InputConsole.choose());
+                int categoryNum = getUserChoice();
 
-                if (chooseNum == EXIT_CODE) {
+                if (categoryNum == EXIT_CODE) {
                     OutputConsole.displayMessage(ConsoleMessage.EXIT_PROGRAM);
                     break;
                 }
 
-                Menu menu = menus.get(chooseNum - 1);
-                OutputConsole.displayCategoryMenu(menu.category());
+                Menu menu = menus.get(categoryNum - 1);
+                printCategoryMenu(menu);
 
-                for (int i = 0; i < menu.menuItems().size(); i++) {
-                    MenuItem menuItem = menu.menuItems().get(i);
-                    OutputConsole.displayMenuItem(i + 1, menuItem.name(), menuItem.price(), menuItem.description());
-                }
+                int itemNum = getUserChoice();
 
-                OutputConsole.displayMessage(ConsoleMessage.GO_BACK);
-                chooseNum = Integer.parseInt(InputConsole.choose());
-
-                if (chooseNum == GO_BACK_CODE) {
+                if (itemNum == GO_BACK_CODE) {
                     continue;
                 }
 
-                MenuItem menuItem = menu.menuItems().get(chooseNum - 1);
+                MenuItem menuItem = menu.menuItems().get(itemNum - 1);
                 OutputConsole.displayChooseMenu(menuItem.name(), menuItem.price(), menuItem.description());
 
             } catch (IndexOutOfBoundsException | NumberFormatException e) {
                 OutputConsole.displayMessage(ExceptionMessage.NON_CORRESPONDING_NUM);
             }
         }
+    }
+
+    private int getUserChoice() {
+        return Integer.parseInt(InputConsole.choose());
+    }
+
+    private void printMainMenu() {
+        OutputConsole.displayMainMenu();
+
+        for (int i = 0; i < menus.size(); i++) {
+            OutputConsole.displayCategory(i + 1, menus.get(i));
+        }
+
+        OutputConsole.displayMessage(ConsoleMessage.EXIT);
+    }
+
+    private void printCategoryMenu(Menu menu) {
+        OutputConsole.displayCategoryMenu(menu.category());
+
+        for (int i = 0; i < menu.menuItems().size(); i++) {
+            MenuItem menuItem = menu.menuItems().get(i);
+            OutputConsole.displayMenuItem(i + 1, menuItem.name(), menuItem.price(), menuItem.description());
+        }
+
+        OutputConsole.displayMessage(ConsoleMessage.GO_BACK);
     }
 }
