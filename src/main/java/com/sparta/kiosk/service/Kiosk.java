@@ -42,8 +42,10 @@ public class Kiosk {
                 MenuItem menuItem = menu.menuItems().get(itemNum - 1);
                 OutputConsole.displayChooseMenu(menuItem.name(), menuItem.price(), menuItem.description());
 
-            } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            } catch (IndexOutOfBoundsException e) {
                 OutputConsole.displayMessage(ExceptionMessage.NON_CORRESPONDING_NUM);
+            } catch (NumberFormatException e) {
+                OutputConsole.displayMessage(ExceptionMessage.INVALID_NUM);
             }
         }
     }
