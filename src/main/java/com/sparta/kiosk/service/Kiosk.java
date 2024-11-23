@@ -2,10 +2,12 @@ package com.sparta.kiosk.service;
 
 import com.sparta.kiosk.domain.Menu;
 import com.sparta.kiosk.domain.MenuItem;
+import com.sparta.kiosk.util.ConsoleMessage;
+import com.sparta.kiosk.util.InputConsole;
+import com.sparta.kiosk.util.OutputConsole;
 
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 
 public class Kiosk {
     private final List<Menu> menus;
@@ -15,37 +17,40 @@ public class Kiosk {
     }
 
     public void start() {
-        Scanner sc = new Scanner(System.in);
-        int choose;
-
         while (true) {
-            System.out.println("[ MAIN MENU ]");
+            OutputConsole.printMainMenu();
+
             for (int i = 0; i < menus.size(); i++) {
-                System.out.println(i + 1 + ". " + menus.get(i).category());
+                OutputConsole.printCategory(i + 1, menus.get(i));
             }
 
-            System.out.println("0. 종료");
-            choose = sc.nextInt();
-
-            if (choose == 0) {
-                System.out.println("프로그램을 종료합니다.");
-                break;
-            }
+            OutputConsole.printlnMessage(ConsoleMessage.EXIT);
 
             try {
-                Menu menu = menus.get(choose - 1);
+                int chooseNum = InputConsole.choose();
 
-                System.out.println("[ BURGERS MENU ]");
+                if (chooseNum == 0) {
+                    OutputConsole.printlnMessage(ConsoleMessage.EXIT_PROGRAM);
+                    break;
+                }
+
+                Menu menu = menus.get(chooseNum - 1);
+                OutputConsole.printCategoryMenu(menu.category());
+
                 for (int i = 0; i < menu.menuItems().size(); i++) {
                     MenuItem menuItem = menu.menuItems().get(i);
-                    System.out.println(i + 1 + ". " + menuItem.name() + "\t| W " + menuItem.price() + " | " + menuItem.description());
+                    OutputConsole.printMenuItem(i + 1, menuItem.name(), menuItem.price(), menuItem.description());
                 }
-                System.out.println("0. 뒤로가기");
 
-                choose = sc.nextInt();
+                System.out.println(ConsoleMessage.GO_BACK);
+                chooseNum = InputConsole.choose();
 
-                MenuItem menuItem = menu.menuItems().get(choose - 1);
-                System.out.println("선택한 메뉴: " + menuItem.name() + " | W " + menuItem.price() + " | " + menuItem.description());
+                if (chooseNum == 0) {
+                    continue;
+                }
+
+                MenuItem menuItem = menu.menuItems().get(chooseNum - 1);
+                OutputConsole.printChooseMenu(menuItem.name(), menuItem.price(), menuItem.description());
 
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("선택하신 숫자는 없는 숫자입니다.");
