@@ -2,56 +2,76 @@ package com.sparta.kiosk.service;
 
 import com.sparta.kiosk.domain.Menu;
 import com.sparta.kiosk.domain.MenuItem;
+import com.sparta.kiosk.exception.ExceptionMessage;
+import com.sparta.kiosk.util.ConsoleMessage;
+import com.sparta.kiosk.util.InputConsole;
+import com.sparta.kiosk.util.OutputConsole;
 
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 
 public class Kiosk {
     private final List<Menu> menus;
+    private static final int EXIT_CODE = 0;
+    private static final int GO_BACK_CODE = 0;
 
     public Kiosk(List<Menu> menus) {
         this.menus = menus;
     }
 
     public void start() {
-        Scanner sc = new Scanner(System.in);
-        int choose;
-
         while (true) {
-            System.out.println("[ MAIN MENU ]");
-            for (int i = 0; i < menus.size(); i++) {
-                System.out.println(i + 1 + ". " + menus.get(i).category());
-            }
-
-            System.out.println("0. 종료");
-            choose = sc.nextInt();
-
-            if (choose == 0) {
-                System.out.println("프로그램을 종료합니다.");
-                break;
-            }
+            printMainMenu();
 
             try {
-                Menu menu = menus.get(choose - 1);
+                int categoryNum = getUserChoice();
 
-                System.out.println("[ BURGERS MENU ]");
-                for (int i = 0; i < menu.menuItems().size(); i++) {
-                    MenuItem menuItem = menu.menuItems().get(i);
-                    System.out.println(i + 1 + ". " + menuItem.name() + "\t| W " + menuItem.price() + " | " + menuItem.description());
+                if (categoryNum == EXIT_CODE) {
+                    OutputConsole.displayMessage(ConsoleMessage.EXIT_PROGRAM);
+                    break;
                 }
-                System.out.println("0. 뒤로가기");
 
-                choose = sc.nextInt();
+                Menu menu = menus.get(categoryNum - 1);
+                printCategoryMenu(menu);
 
-                MenuItem menuItem = menu.menuItems().get(choose - 1);
-                System.out.println("선택한 메뉴: " + menuItem.name() + " | W " + menuItem.price() + " | " + menuItem.description());
+                int itemNum = getUserChoice();
+
+                if (itemNum == GO_BACK_CODE) {
+                    continue;
+                }
+
+                MenuItem menuItem = menu.menuItems().get(itemNum - 1);
+                OutputConsole.displayChooseMenu(menuItem.name(), menuItem.price(), menuItem.description());
 
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("선택하신 숫자는 없는 숫자입니다.");
-            } catch (InputMismatchException e) {
-                System.out.println("숫자만 입력해주세요.");
+                OutputConsole.displayMessage(ExceptionMessage.NON_CORRESPONDING_NUM);
+            } catch (NumberFormatException e) {
+                OutputConsole.displayMessage(ExceptionMessage.INVALID_NUM);
             }
         }
+    }
+
+    private int getUserChoice() {
+        return Integer.parseInt(InputConsole.choose());
+    }
+
+    private void printMainMenu() {
+        OutputConsole.displayMainMenu();
+
+        for (int i = 0; i < menus.size(); i++) {
+            OutputConsole.displayCategory(i + 1, menus.get(i));
+        }
+
+        OutputConsole.displayMessage(ConsoleMessage.EXIT);
+    }
+
+    private void printCategoryMenu(Menu menu) {
+        OutputConsole.displayCategoryMenu(menu.category());
+
+        for (int i = 0; i < menu.menuItems().size(); i++) {
+            MenuItem menuItem = menu.menuItems().get(i);
+            OutputConsole.displayMenuItem(i + 1, menuItem.name(), menuItem.price(), menuItem.description());
+        }
+
+        OutputConsole.displayMessage(ConsoleMessage.GO_BACK);
     }
 }
