@@ -15,7 +15,7 @@ public class Cart {
         this.itemDescription = itemDescription;
     }
 
-    public static Cart addToCart(String itemName, Double itemPrice, String itemDescription) {
+    public static Cart create(String itemName, Double itemPrice, String itemDescription) {
         return new Cart(itemName, DEFAULT_ITEM_QUANTITY, itemPrice, itemDescription);
     }
 

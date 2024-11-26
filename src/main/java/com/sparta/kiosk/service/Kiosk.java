@@ -79,7 +79,7 @@ public class Kiosk {
                 int selectWhetherToAdd = InputConsole.select();
 
                 if (selectWhetherToAdd == CONFIRM_CODE) {
-                    Cart cart = Cart.addToCart(menuItem.name(), menuItem.price(), menuItem.description());
+                    Cart cart = Cart.create(menuItem.name(), menuItem.price(), menuItem.description());
                     order.addOrder(cart);
                     OutputConsole.displayAddCartComplete(cart);
                 } else if (selectWhetherToAdd == CANCEL_CODE) {
