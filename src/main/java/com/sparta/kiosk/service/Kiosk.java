@@ -88,7 +88,6 @@ public class Kiosk {
     private void handleMenuItemSelection(Menu menu, int selectItem) {
         MenuItem menuItem = menu.menuItems().get(selectItem - 1);
         OutputConsole.displaySelectMenu(menuItem.name(), menuItem.price(), menuItem.description());
-
         OutputConsole.displayCheckToAdd(menuItem.name(), menuItem.price(), menuItem.description());
 
         int selectWhetherToAdd = InputConsole.select();
@@ -99,6 +98,8 @@ public class Kiosk {
             OutputConsole.displayAddCartComplete(cart);
         } else if (selectWhetherToAdd == CANCEL_CODE) {
             OutputConsole.displayCancelMenu();
+        } else {
+            throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
         }
     }
 }
