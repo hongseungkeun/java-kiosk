@@ -69,6 +69,12 @@ public class OutputConsole {
         displayEmptyLine();
         displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.TOTAL + RIGHT_SQUARE_BRACKET);
         displayMessage(PRICE + order.getTotalPrice());
+        displayEmptyLine();
+        displayMessage(ConsoleMessage.ORDER_BUTTON + TAB + TAB + ConsoleMessage.MENU_BUTTON);
+    }
+
+    public static void displayOrderComplete(Double totalPrice) {
+        displayMessage(ConsoleMessage.ORDER_COMPLETE + PRICE + totalPrice + ConsoleMessage.ORDER_COMPLETE_END);
     }
 
     public static void displayEmptyLine() {

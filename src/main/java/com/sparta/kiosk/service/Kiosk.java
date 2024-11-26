@@ -4,6 +4,7 @@ import com.sparta.kiosk.domain.Cart;
 import com.sparta.kiosk.domain.Menu;
 import com.sparta.kiosk.domain.MenuItem;
 import com.sparta.kiosk.domain.Order;
+import com.sparta.kiosk.exception.BadInputException;
 import com.sparta.kiosk.exception.ExceptionMessage;
 import com.sparta.kiosk.util.ConsoleMessage;
 import com.sparta.kiosk.util.InputConsole;
@@ -16,6 +17,8 @@ public class Kiosk {
     private static final int GO_BACK_CODE = 0;
     private static final int CONFIRM_CODE = 1;
     private static final int CANCEL_CODE = 2;
+    private static final int ORDER_CODE = 1;
+    private static final int MENU_CODE = 2;
     private static final int INCREMENT = 1;
     private static Order order = new Order();
     private final List<Menu> menus;
@@ -40,8 +43,22 @@ public class Kiosk {
                     break;
                 } else if (selectMenu == orderNum) {
                     OutputConsole.displayCheckOrder(order);
+
+                    int selectOrder = InputConsole.select();
+
+                    if (selectOrder == ORDER_CODE) {
+                        OutputConsole.displayOrderComplete(order.getTotalPrice());
+                        order.removeOrder();
+                        continue;
+                    } else if (selectMenu == MENU_CODE) {
+                        continue;
+                    } else {
+                        throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
+                    }
+
                 } else if (selectMenu == cancelNum) {
                     order.removeOrder();
+                    continue;
                 }
 
                 Menu menu = menus.get(selectMenu - 1);
@@ -65,7 +82,7 @@ public class Kiosk {
                     order.addOrder(cart);
                     OutputConsole.displayMessage(cart.getItemName() + ConsoleMessage.ADD_MENU);
                 } else if (selectWhetherToAdd == CANCEL_CODE) {
-                    OutputConsole.displayMessage("취소되었습니다.");
+                    OutputConsole.displayMessage(ConsoleMessage.CANCEL_COMPLETE);
                 }
 
             } catch (IndexOutOfBoundsException e) {
