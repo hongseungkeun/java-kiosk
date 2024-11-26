@@ -3,6 +3,7 @@ package com.sparta.kiosk.service;
 import com.sparta.kiosk.domain.Cart;
 import com.sparta.kiosk.domain.Menu;
 import com.sparta.kiosk.domain.MenuItem;
+import com.sparta.kiosk.domain.Order;
 import com.sparta.kiosk.exception.ExceptionMessage;
 import com.sparta.kiosk.util.ConsoleMessage;
 import com.sparta.kiosk.util.InputConsole;
@@ -11,32 +12,42 @@ import com.sparta.kiosk.util.OutputConsole;
 import java.util.List;
 
 public class Kiosk {
-    private final List<Menu> menus;
     private static final int EXIT_CODE = 0;
     private static final int GO_BACK_CODE = 0;
-    private static final int CONFIRM = 1;
-    private static final int CANCEL = 2;
+    private static final int CONFIRM_CODE = 1;
+    private static final int CANCEL_CODE = 2;
+    private static final int INCREMENT = 1;
+    private static Order order = new Order();
+    private final List<Menu> menus;
+    private final int orderNum;
+    private final int cancelNum;
 
     public Kiosk(List<Menu> menus) {
         this.menus = menus;
+        this.orderNum = menus.size() + INCREMENT;
+        this.cancelNum = orderNum + INCREMENT;
     }
 
     public void start() {
         while (true) {
-            printMainMenu();
+            OutputConsole.displayMainMenu(menus, order.getCarts(), orderNum, cancelNum);
 
             try {
-                int selectCategory = getUserSelect();
+                int selectMenu = InputConsole.select();
 
-                if (selectCategory == EXIT_CODE) {
+                if (selectMenu == EXIT_CODE) {
                     OutputConsole.displayMessage(ConsoleMessage.EXIT_PROGRAM);
                     break;
+                } else if (selectMenu == orderNum) {
+                    OutputConsole.displayCheckOrder(order);
+                } else if (selectMenu == cancelNum) {
+                    order.removeOrder();
                 }
 
-                Menu menu = menus.get(selectCategory - 1);
+                Menu menu = menus.get(selectMenu - 1);
                 printCategoryMenu(menu);
 
-                int selectItem = getUserSelect();
+                int selectItem = InputConsole.select();
 
                 if (selectItem == GO_BACK_CODE) {
                     continue;
@@ -47,35 +58,22 @@ public class Kiosk {
 
                 OutputConsole.displayCheckToAdd(menuItem.name(), menuItem.price(), menuItem.description());
 
-                int selectWhetherToAdd = getUserSelect();
+                int selectWhetherToAdd = InputConsole.select();
 
-                if (selectWhetherToAdd == CONFIRM) {
-                    Cart cart = Cart.addToCart(menuItem.name(), menuItem.price());
+                if (selectWhetherToAdd == CONFIRM_CODE) {
+                    Cart cart = Cart.addToCart(menuItem.name(), menuItem.price(), menuItem.description());
+                    order.addOrder(cart);
                     OutputConsole.displayMessage(cart.getItemName() + ConsoleMessage.ADD_MENU);
-                } else if (selectWhetherToAdd == CANCEL) {
+                } else if (selectWhetherToAdd == CANCEL_CODE) {
                     OutputConsole.displayMessage("취소되었습니다.");
                 }
 
             } catch (IndexOutOfBoundsException e) {
                 OutputConsole.displayMessage(ExceptionMessage.NON_CORRESPONDING_NUM);
             } catch (NumberFormatException e) {
-                OutputConsole.displayMessage(ExceptionMessage.INVALID_NUM);
+                OutputConsole.displayMessage(e.getMessage());
             }
         }
-    }
-
-    private int getUserSelect() {
-        return Integer.parseInt(InputConsole.select());
-    }
-
-    private void printMainMenu() {
-        OutputConsole.displayMainMenu();
-
-        for (int i = 0; i < menus.size(); i++) {
-            OutputConsole.displayCategory(i + 1, menus.get(i));
-        }
-
-        OutputConsole.displayMessage(ConsoleMessage.EXIT);
     }
 
     private void printCategoryMenu(Menu menu) {
