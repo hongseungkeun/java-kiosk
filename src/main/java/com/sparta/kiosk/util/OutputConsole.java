@@ -2,6 +2,7 @@ package com.sparta.kiosk.util;
 
 import com.sparta.kiosk.domain.Cart;
 import com.sparta.kiosk.domain.Menu;
+import com.sparta.kiosk.domain.MenuItem;
 import com.sparta.kiosk.domain.Order;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class OutputConsole {
     private static final String SEPARATOR = " | ";
     private static final String PRICE_SEPARATOR = SEPARATOR + PRICE;
     private static final String DOUBLE_QUOTATION_MART = "\"";
+    private static final String HYPHEN = " - ";
 
     private OutputConsole() {
     }
@@ -28,7 +30,7 @@ public class OutputConsole {
 
         displayMessage(ConsoleMessage.EXIT);
 
-        if(!carts.isEmpty()) {
+        if (!carts.isEmpty()) {
             displayEmptyLine();
             displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.ORDER_MENU + RIGHT_SQUARE_BRACKET);
             displayMessage(orderNum + DOT + ConsoleMessage.ORDER + TAB + TAB + SEPARATOR + ConsoleMessage.ORDER_MSG);
@@ -36,9 +38,16 @@ public class OutputConsole {
         }
     }
 
-    public static void displayCategoryMenu(String category) {
+    public static void displayCategoryMenu(Menu menu) {
         displayEmptyLine();
-        displayMessage(LEFT_SQUARE_BRACKET + category.toUpperCase() + ConsoleMessage.MENU + RIGHT_SQUARE_BRACKET);
+        displayMessage(LEFT_SQUARE_BRACKET + menu.category().toUpperCase() + ConsoleMessage.MENU + RIGHT_SQUARE_BRACKET);
+
+        for (int i = 0; i < menu.menuItems().size(); i++) {
+            MenuItem menuItem = menu.menuItems().get(i);
+            displayMenuItem(i + 1, menuItem.name(), menuItem.price(), menuItem.description());
+        }
+
+        displayMessage(ConsoleMessage.GO_BACK);
     }
 
     public static void displayCategory(int index, Menu menu) {
@@ -60,12 +69,19 @@ public class OutputConsole {
         displayMessage(ConsoleMessage.CONFIRM_BUTTON + TAB + TAB + ConsoleMessage.CANCEL_BUTTON);
     }
 
+    public static void displayAddCartComplete(Cart cart) {
+        displayEmptyLine();
+        OutputConsole.displayMessage(cart.getItemName() + ConsoleMessage.ADD_MENU);
+        OutputConsole.displayMessage(ConsoleMessage.MOVE_TO_MENU);
+        displayEmptyLine();
+    }
+
     public static void displayCheckOrder(Order order) {
         displayEmptyLine();
         displayMessage(ConsoleMessage.CHECK_ORDER);
         displayEmptyLine();
         displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.ORDER + RIGHT_SQUARE_BRACKET);
-        order.getCarts().forEach(i -> displayMessage(i.getItemName() + PRICE_SEPARATOR + i.getItemPrice() + SEPARATOR + i.getItemDescription()));
+        order.getCarts().forEach(i -> displayMessage(i.getItemName() + PRICE_SEPARATOR + i.getItemPrice() + SEPARATOR + i.getItemDescription() + HYPHEN + i.getItemQuantity()));
         displayEmptyLine();
         displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.TOTAL + RIGHT_SQUARE_BRACKET);
         displayMessage(PRICE + order.getTotalPrice());

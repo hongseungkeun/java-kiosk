@@ -20,13 +20,14 @@ public class Kiosk {
     private static final int ORDER_CODE = 1;
     private static final int MENU_CODE = 2;
     private static final int INCREMENT = 1;
-    private static Order order = new Order();
     private final List<Menu> menus;
+    private final Order order;
     private final int orderNum;
     private final int cancelNum;
 
-    public Kiosk(List<Menu> menus) {
+    public Kiosk(List<Menu> menus, Order order) {
         this.menus = menus;
+        this.order = order;
         this.orderNum = menus.size() + INCREMENT;
         this.cancelNum = orderNum + INCREMENT;
     }
@@ -62,7 +63,7 @@ public class Kiosk {
                 }
 
                 Menu menu = menus.get(selectMenu - 1);
-                printCategoryMenu(menu);
+                OutputConsole.displayCategoryMenu(menu);
 
                 int selectItem = InputConsole.select();
 
@@ -80,27 +81,16 @@ public class Kiosk {
                 if (selectWhetherToAdd == CONFIRM_CODE) {
                     Cart cart = Cart.addToCart(menuItem.name(), menuItem.price(), menuItem.description());
                     order.addOrder(cart);
-                    OutputConsole.displayMessage(cart.getItemName() + ConsoleMessage.ADD_MENU);
+                    OutputConsole.displayAddCartComplete(cart);
                 } else if (selectWhetherToAdd == CANCEL_CODE) {
                     OutputConsole.displayMessage(ConsoleMessage.CANCEL_COMPLETE);
                 }
 
             } catch (IndexOutOfBoundsException e) {
                 OutputConsole.displayMessage(ExceptionMessage.NON_CORRESPONDING_NUM);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | BadInputException e) {
                 OutputConsole.displayMessage(e.getMessage());
             }
         }
-    }
-
-    private void printCategoryMenu(Menu menu) {
-        OutputConsole.displayCategoryMenu(menu.category());
-
-        for (int i = 0; i < menu.menuItems().size(); i++) {
-            MenuItem menuItem = menu.menuItems().get(i);
-            OutputConsole.displayMenuItem(i + 1, menuItem.name(), menuItem.price(), menuItem.description());
-        }
-
-        OutputConsole.displayMessage(ConsoleMessage.GO_BACK);
     }
 }
