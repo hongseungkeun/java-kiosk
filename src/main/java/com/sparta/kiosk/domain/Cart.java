@@ -3,10 +3,10 @@ package com.sparta.kiosk.domain;
 public class Cart {
     private static final Integer DEFAULT_ITEM_QUANTITY = 1;
 
-    private String itemName;
+    private final String itemName;
     private Integer itemQuantity;
-    private Double itemPrice;
-    private String itemDescription;
+    private final Double itemPrice;
+    private final String itemDescription;
 
     private Cart(String itemName, Integer itemQuantity, Double itemPrice, String itemDescription) {
         this.itemName = itemName;
@@ -33,5 +33,9 @@ public class Cart {
 
     public String getItemDescription() {
         return itemDescription;
+    }
+
+    public void increaseItemQuantity() {
+        this.itemQuantity += 1;
     }
 }

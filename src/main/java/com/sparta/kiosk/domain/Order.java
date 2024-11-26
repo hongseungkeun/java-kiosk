@@ -20,8 +20,11 @@ public class Order {
                 .sum();
     }
 
-    public void addOrder(Cart cart) {
-        carts.add(cart);
+    public void addOrder(Cart newCart) {
+        carts.stream()
+                .filter(cart -> cart.getItemName().equals(newCart.getItemName()))
+                .findFirst()
+                .ifPresentOrElse(Cart::increaseItemQuantity, () -> carts.add(newCart));
     }
 
     public void removeOrder() {
