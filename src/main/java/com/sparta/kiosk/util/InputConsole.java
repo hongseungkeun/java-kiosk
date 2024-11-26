@@ -11,12 +11,10 @@ public class InputConsole {
     }
 
     public static int select() {
-        while (true) {
-            try {
-                return Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                throw new NumberFormatException(ExceptionMessage.INVALID_NUM);
-            }
+        try {
+            return Integer.parseInt(sc.nextLine());
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException(ExceptionMessage.INVALID_NUM);
         }
     }
 }

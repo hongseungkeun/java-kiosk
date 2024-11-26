@@ -15,7 +15,7 @@ public class ConsoleMessage {
     public static final String CHECK_ORDER = "아래와 같이 주문 하시겠습니까?";
     public static final String ORDER_COMPLETE = "주문이 완료되었습니다. 금액은 ";
     public static final String ORDER_COMPLETE_END = " 입니다.";
-    public static final String CANCEL_COMPLETE = "취소되었습니다.";
+    public static final String CANCEL_COMPLETE = "주문이 취소되었습니다.";
 
     public static final String GO_BACK = "0. 뒤로가기";
     public static final String SELECT_MENU = "선택한 메뉴: ";

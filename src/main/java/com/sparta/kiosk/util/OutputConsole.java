@@ -21,7 +21,7 @@ public class OutputConsole {
     private OutputConsole() {
     }
 
-    public static void displayMainMenu(List<Menu> menus, List<Cart> carts, int orderNum, int cancelNum) {
+    public static boolean displayMainMenu(List<Menu> menus, List<Cart> carts, int orderNum, int cancelNum) {
         displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.MAIN_MENU + RIGHT_SQUARE_BRACKET);
 
         for (int i = 0; i < menus.size(); i++) {
@@ -35,7 +35,9 @@ public class OutputConsole {
             displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.ORDER_MENU + RIGHT_SQUARE_BRACKET);
             displayMessage(orderNum + DOT + ConsoleMessage.ORDER + TAB + TAB + SEPARATOR + ConsoleMessage.ORDER_MSG);
             displayMessage(cancelNum + DOT + ConsoleMessage.CANCEL + TAB + TAB + SEPARATOR + ConsoleMessage.CANCEL_MSG);
+            return true;
         }
+        return false;
     }
 
     public static void displayCategoryMenu(Menu menu) {
@@ -91,6 +93,12 @@ public class OutputConsole {
 
     public static void displayOrderComplete(Double totalPrice) {
         displayMessage(ConsoleMessage.ORDER_COMPLETE + PRICE + totalPrice + ConsoleMessage.ORDER_COMPLETE_END);
+        displayEmptyLine();
+    }
+
+    public static void displayCancelMenu() {
+        OutputConsole.displayMessage(ConsoleMessage.CANCEL_COMPLETE);
+        OutputConsole.displayEmptyLine();
     }
 
     public static void displayEmptyLine() {
