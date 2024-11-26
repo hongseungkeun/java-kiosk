@@ -16,7 +16,7 @@ public class Order {
 
     public Double getTotalPrice() {
         return carts.stream()
-                .mapToDouble(Cart::getItemPrice)
+                .mapToDouble(cart -> cart.getItemPrice() * cart.getItemQuantity())
                 .sum();
     }
 
