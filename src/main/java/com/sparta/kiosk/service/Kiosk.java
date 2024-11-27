@@ -92,14 +92,14 @@ public class Kiosk {
 
         int selectWhetherToAdd = InputConsole.select();
 
-        if (selectWhetherToAdd == CONFIRM_CODE) {
-            Cart cart = Cart.create(menuItem.name(), menuItem.price(), menuItem.description());
-            orderService.getOrder().addOrder(cart);
-            OutputConsole.displayAddCartComplete(cart);
-        } else if (selectWhetherToAdd == CANCEL_CODE) {
-            OutputConsole.displayCancelMenu();
-        } else {
-            throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
+        switch (selectWhetherToAdd) {
+            case CONFIRM_CODE -> {
+                Cart cart = Cart.create(menuItem.name(), menuItem.price(), menuItem.description());
+                orderService.getOrder().addOrder(cart);
+                OutputConsole.displayAddCartComplete(cart);
+            }
+            case CANCEL_CODE -> OutputConsole.displayCancelMenu();
+            default -> throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
         }
     }
 }
