@@ -15,9 +15,9 @@ public class Order {
     }
 
     public Double getTotalPrice() {
-        return carts.stream()
+        return Math.round(carts.stream()
                 .mapToDouble(cart -> cart.getItemPrice() * cart.getItemQuantity())
-                .sum();
+                .sum() * 10.0) / 10.0;
     }
 
     public Double getDiscountPrice(UserType userType) {
