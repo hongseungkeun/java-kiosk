@@ -6,6 +6,7 @@ import java.util.List;
 public class Order {
     private static final double ROUNDING_FACTOR = 10.0;
     private final List<Cart> carts;
+    private double totalPriceCash = 0.0;
 
     public Order() {
         this.carts = new ArrayList<>();
@@ -16,13 +17,14 @@ public class Order {
     }
 
     public Double getTotalPrice() {
-        return Math.round(carts.stream()
+         this.totalPriceCash = Math.round(carts.stream()
                 .mapToDouble(cart -> cart.getItemPrice() * cart.getItemQuantity())
                 .sum() * ROUNDING_FACTOR) / ROUNDING_FACTOR;
+        return this.totalPriceCash;
     }
 
     public Double getDiscountPrice(UserType userType) {
-        return getTotalPrice() - (getTotalPrice() * userType.getDiscountRate());
+        return this.totalPriceCash - this.totalPriceCash * userType.getDiscountRate();
     }
 
     public void addOrder(Cart newCart) {
