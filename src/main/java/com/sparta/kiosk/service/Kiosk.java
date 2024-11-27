@@ -55,8 +55,8 @@ public class Kiosk {
     /**
      * 선택한 코드 실행
      *
-     * @param selectMenu : 선택한 메뉴 or 카테고리 번호
-     * @param isPossibleOrder   : 주문이 가능한지 여부
+     * @param selectMenu      : 선택한 메뉴 or 카테고리 번호
+     * @param isPossibleOrder : 주문이 가능한지 여부
      * @return true : 키오스크 종료, false: 키오스크 반복
      */
     private boolean handleMainMenuSelection(int selectMenu, boolean isPossibleOrder) {
@@ -103,7 +103,7 @@ public class Kiosk {
     /**
      * 메뉴아이템을 장바구니에 담을지 취소할지 선택
      *
-     * @param menu : 선택한 메뉴
+     * @param menu       : 선택한 메뉴
      * @param selectItem : 선택한 메뉴아이템
      */
     private void handleMenuItemSelection(Menu menu, int selectItem) {

@@ -22,14 +22,13 @@ public class Order {
      * @return 총합 금액
      */
     public Double getTotalPrice() {
-         this.totalPriceCash = Math.round(carts.stream()
+        this.totalPriceCash = Math.round(carts.stream()
                 .mapToDouble(cart -> cart.getItemPrice() * cart.getItemQuantity())
                 .sum() * ROUNDING_FACTOR) / ROUNDING_FACTOR;
         return this.totalPriceCash;
     }
 
     /**
-     *
      * @param userType : 사용자 유형
      * @return 사용자 유형별 할인율을 적용한 총합 금액
      */

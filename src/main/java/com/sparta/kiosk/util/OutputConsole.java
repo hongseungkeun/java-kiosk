@@ -26,9 +26,9 @@ public class OutputConsole {
     /**
      * 메인 메뉴 출력
      *
-     * @param menus : 메뉴 리스트
-     * @param carts : 장바구니
-     * @param orderNum : 장바구니 확인 번호
+     * @param menus     : 메뉴 리스트
+     * @param carts     : 장바구니
+     * @param orderNum  : 장바구니 확인 번호
      * @param cancelNum : 주문 취소 번호
      * @return true : 장바구니에 아이템이 담겨있다, false : 장바구니가 비어있다
      */
@@ -73,8 +73,8 @@ public class OutputConsole {
     /**
      * 선택한 메뉴 메세지 출력
      *
-     * @param name : 이름
-     * @param price : 가격
+     * @param name        : 이름
+     * @param price       : 가격
      * @param description : 설명
      */
     public static void displaySelectMenu(String name, double price, String description) {
@@ -84,8 +84,8 @@ public class OutputConsole {
     /**
      * 메뉴를 장바구니에 추가할지 물어보는 메세지 출력
      *
-     * @param name : 이름
-     * @param price : 가격
+     * @param name        : 이름
+     * @param price       : 가격
      * @param description : 설명
      */
     public static void displayCheckToAdd(String name, double price, String description) {
@@ -120,7 +120,7 @@ public class OutputConsole {
      * 번호를 붙힌 카테고리 출력
      *
      * @param index : 해당 카테고리 번호
-     * @param menu : 메뉴
+     * @param menu  : 메뉴
      */
     private static void displayCategory(int index, Menu menu) {
         displayMessage(index + DOT + menu.category());
@@ -129,9 +129,9 @@ public class OutputConsole {
     /**
      * 번호를 붙힌 메뉴 아이템 출력
      *
-     * @param index : 해당 메뉴 아이템 번호
-     * @param name : 메뉴 아이템 이름
-     * @param price : 메뉴 아이템 가격
+     * @param index       : 해당 메뉴 아이템 번호
+     * @param name        : 메뉴 아이템 이름
+     * @param price       : 메뉴 아이템 가격
      * @param description : 메뉴 아이템 설명
      */
     private static void displayMenuItem(int index, String name, double price, String description) {
