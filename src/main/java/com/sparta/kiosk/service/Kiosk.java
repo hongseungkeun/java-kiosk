@@ -12,11 +12,11 @@ import com.sparta.kiosk.util.OutputConsole;
 import java.util.List;
 
 public class Kiosk {
-    private static final int EXIT_CODE = 0;
-    private static final int GO_BACK_CODE = 0;
-    private static final int CONFIRM_CODE = 1;
-    private static final int CANCEL_CODE = 2;
-    private static final int INCREMENT = 1;
+    private static final int EXIT_CODE = 0;     // 종료 코드
+    private static final int GO_BACK_CODE = 0;  // 뒤로 가기 코드
+    private static final int CONFIRM_CODE = 1;  // 확인 코드
+    private static final int CANCEL_CODE = 2;   // 취소 코드
+    private static final int INCREMENT = 1;     // 사이즈를 1 증가시키기 위한 상수
     private final List<Menu> menus;
     private final OrderService orderService;
     private final int orderNum;
@@ -29,6 +29,9 @@ public class Kiosk {
         this.cancelNum = orderNum + INCREMENT;
     }
 
+    /**
+     * 키오스크 앱을 종료 코드를 받기전까지 반복
+     */
     public void start() {
         while (true) {
             boolean isPossibleOrder = OutputConsole.displayMainMenu(menus, orderService.getOrder().getCarts(), orderNum, cancelNum);
@@ -49,6 +52,13 @@ public class Kiosk {
         }
     }
 
+    /**
+     * 선택한 코드 실행
+     *
+     * @param selectMenu      : 선택한 메뉴 or 카테고리 번호
+     * @param isPossibleOrder : 주문이 가능한지 여부
+     * @return true : 키오스크 종료, false: 키오스크 반복
+     */
     private boolean handleMainMenuSelection(int selectMenu, boolean isPossibleOrder) {
         if (selectMenu == EXIT_CODE) {
             OutputConsole.displayMessage(ConsoleMessage.EXIT_PROGRAM);
@@ -72,6 +82,11 @@ public class Kiosk {
         return false;
     }
 
+    /**
+     * 입력받은 값에 해당하는 카테고리에서 장바구니에 담을 메뉴아이템 선택
+     *
+     * @param selectMenu : 선택한 메뉴 or 카테고리 번호
+     */
     private void handleMenuSelection(int selectMenu) {
         Menu menu = menus.get(selectMenu - 1);
         OutputConsole.displayCategoryMenu(menu);
@@ -85,6 +100,12 @@ public class Kiosk {
         handleMenuItemSelection(menu, selectItem);
     }
 
+    /**
+     * 메뉴아이템을 장바구니에 담을지 취소할지 선택
+     *
+     * @param menu       : 선택한 메뉴
+     * @param selectItem : 선택한 메뉴아이템
+     */
     private void handleMenuItemSelection(Menu menu, int selectItem) {
         MenuItem menuItem = menu.menuItems().get(selectItem - 1);
         OutputConsole.displaySelectMenu(menuItem.name(), menuItem.price(), menuItem.description());
@@ -92,14 +113,14 @@ public class Kiosk {
 
         int selectWhetherToAdd = InputConsole.select();
 
-        if (selectWhetherToAdd == CONFIRM_CODE) {
-            Cart cart = Cart.create(menuItem.name(), menuItem.price(), menuItem.description());
-            orderService.getOrder().addOrder(cart);
-            OutputConsole.displayAddCartComplete(cart);
-        } else if (selectWhetherToAdd == CANCEL_CODE) {
-            OutputConsole.displayCancelMenu();
-        } else {
-            throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
+        switch (selectWhetherToAdd) {
+            case CONFIRM_CODE -> {
+                Cart cart = Cart.create(menuItem.name(), menuItem.price(), menuItem.description());
+                orderService.getOrder().addOrder(cart);
+                OutputConsole.displayAddCartComplete(cart);
+            }
+            case CANCEL_CODE -> OutputConsole.displayCancelMenu();
+            default -> throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
         }
     }
 }

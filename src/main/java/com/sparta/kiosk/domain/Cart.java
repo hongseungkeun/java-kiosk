@@ -1,7 +1,7 @@
 package com.sparta.kiosk.domain;
 
 public class Cart {
-    private static final Integer DEFAULT_ITEM_QUANTITY = 1;
+    private static final Integer DEFAULT_ITEM_QUANTITY = 1; // 생성될 때 디폴트 수량
 
     private final String itemName;
     private Integer itemQuantity;
@@ -35,7 +35,21 @@ public class Cart {
         return itemDescription;
     }
 
+    /**
+     * 수량 증가
+     */
     public void increaseItemQuantity() {
         this.itemQuantity += 1;
+    }
+
+    /**
+     * 수량을 감소시키고 0인지 아닌지 판별
+     *
+     * @return true : 수량이 0,  false 수량이 0보다 큼
+     */
+    public boolean decreaseItemQuantity() {
+        this.itemQuantity -= 1;
+
+        return this.itemQuantity == 0;
     }
 }
