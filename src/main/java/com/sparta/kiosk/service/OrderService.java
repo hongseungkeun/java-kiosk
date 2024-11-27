@@ -33,7 +33,7 @@ public class OrderService {
             OutputConsole.displayCheckOrder(order);
             int selectOrder = InputConsole.select();
 
-            checkOrderContinue = false;
+            checkOrderContinue = true;
 
             switch (selectOrder) {
                 case ORDER_CODE -> {
@@ -46,15 +46,15 @@ public class OrderService {
                     OutputConsole.displayModifyOrder(order);
 
                     int selectModify = InputConsole.select();
-                    checkOrderContinue = handleModifyOrderSelection(selectModify);
+                    handleModifyOrderSelection(selectModify);
                 }
-                case MENU_CODE -> {
-                    OutputConsole.displayMessage(ConsoleMessage.MOVE_TO_MENU);
-                    OutputConsole.displayEmptyLine();
-                }
+                case MENU_CODE -> checkOrderContinue = false;
                 default -> throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
             }
-        } while (checkOrderContinue);
+        } while (checkOrderContinue && !order.getCarts().isEmpty());
+
+        OutputConsole.displayMessage(ConsoleMessage.MOVE_TO_MENU);
+        OutputConsole.displayEmptyLine();
     }
 
     public void removeOrder() {
@@ -78,7 +78,7 @@ public class OrderService {
         }
     }
 
-    private boolean handleModifyOrderSelection(int selectModify) {
+    private void handleModifyOrderSelection(int selectModify) {
         Cart cart = order.getCarts().get(selectModify - 1);
 
         OutputConsole.displayCheckModifyOrder();
@@ -94,7 +94,5 @@ public class OrderService {
             case CANCEL_CODE -> OutputConsole.displayMessage(ConsoleMessage.CANCEL_COMPLETE);
             default -> throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
         }
-
-        return true;
     }
 }
