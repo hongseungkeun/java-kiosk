@@ -148,7 +148,8 @@ W 8.9
 │   ├── Menu.java                   // 메뉴 클래스 - 메뉴 카테고리, MenuItems
 │   ├── MenuItem.java               // 메뉴 아이템 클래스 - 메뉴의 이름, 가격, 설명
 │   ├── Cart.java                   // 장바구니 클래스 - 메뉴의 이름, 가격, 수량, 설명
-│   └── Order.java                  // 주문 클래스 - Carts
+│   ├── Order.java                  // 주문 클래스 - Carts
+│   └── UserType.java               // 사용자 유형별 할인율 enum
 ├── exception      
 │   ├── ExceptionMessage.java       // 예외 메세지 상수 클래스
 │   └── BadInputException.java      
