@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Order {
+    private static final double ROUNDING_FACTOR = 10.0;
     private final List<Cart> carts;
 
     public Order() {
@@ -17,7 +18,7 @@ public class Order {
     public Double getTotalPrice() {
         return Math.round(carts.stream()
                 .mapToDouble(cart -> cart.getItemPrice() * cart.getItemQuantity())
-                .sum() * 10.0) / 10.0;
+                .sum() * ROUNDING_FACTOR) / ROUNDING_FACTOR;
     }
 
     public Double getDiscountPrice(UserType userType) {
@@ -29,6 +30,10 @@ public class Order {
                 .filter(cart -> cart.getItemName().equals(newCart.getItemName()))
                 .findFirst()
                 .ifPresentOrElse(Cart::increaseItemQuantity, () -> carts.add(newCart));
+    }
+
+    public void removeCartItem(Cart newCart) {
+        carts.removeIf(cart -> cart.getItemName().equals(newCart.getItemName()));
     }
 
     public void removeOrder() {

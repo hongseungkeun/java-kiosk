@@ -38,4 +38,10 @@ public class Cart {
     public void increaseItemQuantity() {
         this.itemQuantity += 1;
     }
+
+    public boolean decreaseItemQuantity() {
+        this.itemQuantity -= 1;
+
+        return this.itemQuantity == 0;
+    }
 }

@@ -4,6 +4,7 @@ import com.sparta.kiosk.domain.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class OutputConsole {
     private static final String LEFT_SQUARE_BRACKET = "[ ";
@@ -24,9 +25,9 @@ public class OutputConsole {
     public static boolean displayMainMenu(List<Menu> menus, List<Cart> carts, int orderNum, int cancelNum) {
         displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.MAIN_MENU + RIGHT_SQUARE_BRACKET);
 
-        for (int i = 0; i < menus.size(); i++) {
-            displayCategory(i + 1, menus.get(i));
-        }
+        IntStream.range(0, menus.size())
+                .forEach(i ->
+                        displayCategory(i + 1, menus.get(i)));
 
         displayMessage(ConsoleMessage.EXIT);
 
@@ -44,10 +45,12 @@ public class OutputConsole {
         displayEmptyLine();
         displayMessage(LEFT_SQUARE_BRACKET + menu.category().toUpperCase() + ConsoleMessage.MENU + RIGHT_SQUARE_BRACKET);
 
-        for (int i = 0; i < menu.menuItems().size(); i++) {
-            MenuItem menuItem = menu.menuItems().get(i);
-            displayMenuItem(i + 1, menuItem.name(), menuItem.price(), menuItem.description());
-        }
+        IntStream.range(0, menu.menuItems().size())
+                .forEach(i -> {
+                    MenuItem menuItem = menu.menuItems().get(i);
+                    displayMenuItem(i + 1, menuItem.name(), menuItem.price(), menuItem.description());
+                });
+
 
         displayMessage(ConsoleMessage.GO_BACK);
     }
@@ -73,8 +76,8 @@ public class OutputConsole {
 
     public static void displayAddCartComplete(Cart cart) {
         displayEmptyLine();
-        OutputConsole.displayMessage(cart.getItemName() + ConsoleMessage.ADD_MENU);
-        OutputConsole.displayMessage(ConsoleMessage.MOVE_TO_MENU);
+        displayMessage(cart.getItemName() + ConsoleMessage.ADD_MENU);
+        displayMessage(ConsoleMessage.MOVE_TO_MENU);
         displayEmptyLine();
     }
 
@@ -83,12 +86,30 @@ public class OutputConsole {
         displayMessage(ConsoleMessage.CHECK_ORDER);
         displayEmptyLine();
         displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.ORDER + RIGHT_SQUARE_BRACKET);
-        order.getCarts().forEach(i -> displayMessage(i.getItemName() + PRICE_SEPARATOR + i.getItemPrice() + SEPARATOR + i.getItemDescription() + HYPHEN + i.getItemQuantity()));
+        order.getCarts()
+                .forEach(i -> displayMessage(i.getItemName() + PRICE_SEPARATOR + i.getItemPrice() + SEPARATOR + i.getItemDescription() + HYPHEN + i.getItemQuantity()));
         displayEmptyLine();
         displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.TOTAL + RIGHT_SQUARE_BRACKET);
         displayMessage(PRICE + order.getTotalPrice());
         displayEmptyLine();
-        displayMessage(ConsoleMessage.ORDER_BUTTON + TAB + TAB + ConsoleMessage.MENU_BUTTON);
+        displayMessage(ConsoleMessage.ORDER_BUTTON + TAB + TAB + ConsoleMessage.MODIFY_BUTTON + TAB + TAB + ConsoleMessage.MENU_BUTTON);
+    }
+
+    public static void displayModifyOrder(Order order) {
+        displayEmptyLine();
+        displayMessage(ConsoleMessage.MODIFY_MENU);
+        displayEmptyLine();
+        displayMessage(LEFT_SQUARE_BRACKET + ConsoleMessage.ORDER + RIGHT_SQUARE_BRACKET);
+        IntStream.range(0, order.getCarts().size())
+                .forEach(i -> {
+                    Cart cart = order.getCarts().get(i);
+                    displayMessage(i + 1 + DOT + cart.getItemName() + PRICE_SEPARATOR + cart.getItemPrice() + SEPARATOR + cart.getItemDescription() + HYPHEN + cart.getItemQuantity());
+                });
+    }
+
+    public static void displayCheckModifyOrder() {
+        displayEmptyLine();
+        displayMessage(ConsoleMessage.ADD_CART_ITEM + TAB + TAB + ConsoleMessage.REMOVE_CART_ITEM + TAB + TAB + ConsoleMessage.CANCEL_MODIFY_BUTTON);
     }
 
     public static void displayOrderComplete(Double totalPrice) {
@@ -98,14 +119,14 @@ public class OutputConsole {
     }
 
     public static void displayCancelMenu() {
-        OutputConsole.displayEmptyLine();
-        OutputConsole.displayMessage(ConsoleMessage.CANCEL_COMPLETE);
-        OutputConsole.displayEmptyLine();
+        displayEmptyLine();
+        displayMessage(ConsoleMessage.CANCEL_COMPLETE);
+        displayEmptyLine();
     }
 
     public static void displayUserDiscountInfo() {
         displayEmptyLine();
-        OutputConsole.displayMessage(ConsoleMessage.USER_DISCOUNT_INFO);
+        displayMessage(ConsoleMessage.USER_DISCOUNT_INFO);
 
         Arrays.stream(UserType.values())
                 .forEach(type -> displayMessage(type.getCode() + DOT + type.getDescription() + COLON + type.getDiscountRate() * 100 + PERCENT));

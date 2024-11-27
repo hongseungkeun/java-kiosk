@@ -1,5 +1,6 @@
 package com.sparta.kiosk.service;
 
+import com.sparta.kiosk.domain.Cart;
 import com.sparta.kiosk.domain.Order;
 import com.sparta.kiosk.domain.UserType;
 import com.sparta.kiosk.exception.BadInputException;
@@ -10,7 +11,11 @@ import com.sparta.kiosk.util.OutputConsole;
 
 public class OrderService {
     private static final int ORDER_CODE = 1;
-    private static final int MENU_CODE = 2;
+    private static final int MODIFY_CODE = 2;
+    private static final int MENU_CODE = 3;
+    private static final int ADD_ITEM_CODE = 1;
+    private static final int REMOVE_ITEM_CODE = 2;
+    private static final int CANCEL_CODE = 3;
     private final Order order;
 
     public OrderService(Order order) {
@@ -22,22 +27,34 @@ public class OrderService {
     }
 
     public void proceedOrder() {
-        OutputConsole.displayCheckOrder(order);
-        int selectOrder = InputConsole.select();
+        boolean checkOrderContinue;
 
-        switch (selectOrder) {
-            case ORDER_CODE -> {
-                UserType userType = handleUserTypeSelection();
+        do {
+            OutputConsole.displayCheckOrder(order);
+            int selectOrder = InputConsole.select();
 
-                OutputConsole.displayOrderComplete(order.getDiscountPrice(userType));
-                order.removeOrder();
+            checkOrderContinue = false;
+
+            switch (selectOrder) {
+                case ORDER_CODE -> {
+                    UserType userType = handleUserTypeSelection();
+
+                    OutputConsole.displayOrderComplete(order.getDiscountPrice(userType));
+                    order.removeOrder();
+                }
+                case MODIFY_CODE -> {
+                    OutputConsole.displayModifyOrder(order);
+
+                    int selectModify = InputConsole.select();
+                    checkOrderContinue = handleModifyOrderSelection(selectModify);
+                }
+                case MENU_CODE -> {
+                    OutputConsole.displayMessage(ConsoleMessage.MOVE_TO_MENU);
+                    OutputConsole.displayEmptyLine();
+                }
+                default -> throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
             }
-            case MENU_CODE -> {
-                OutputConsole.displayMessage(ConsoleMessage.MOVE_TO_MENU);
-                OutputConsole.displayEmptyLine();
-            }
-            default -> throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
-        }
+        } while (checkOrderContinue);
     }
 
     public void removeOrder() {
@@ -59,5 +76,25 @@ public class OrderService {
         } else {
             throw new BadInputException(ExceptionMessage.INVALID_NUM);
         }
+    }
+
+    private boolean handleModifyOrderSelection(int selectModify) {
+        Cart cart = order.getCarts().get(selectModify - 1);
+
+        OutputConsole.displayCheckModifyOrder();
+        int checkModify = InputConsole.select();
+
+        switch (checkModify) {
+            case ADD_ITEM_CODE -> cart.increaseItemQuantity();
+            case REMOVE_ITEM_CODE -> {
+                if (cart.decreaseItemQuantity()) {
+                    order.removeCartItem(cart);
+                }
+            }
+            case CANCEL_CODE -> OutputConsole.displayMessage(ConsoleMessage.CANCEL_COMPLETE);
+            default -> throw new BadInputException(ExceptionMessage.NON_CORRESPONDING_NUM);
+        }
+
+        return true;
     }
 }
