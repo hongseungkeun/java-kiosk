@@ -1,6 +1,7 @@
 package com.sparta.kiosk.service;
 
 import com.sparta.kiosk.domain.Order;
+import com.sparta.kiosk.domain.UserType;
 import com.sparta.kiosk.exception.BadInputException;
 import com.sparta.kiosk.exception.ExceptionMessage;
 import com.sparta.kiosk.util.ConsoleMessage;
@@ -26,7 +27,9 @@ public class OrderService {
 
         switch (selectOrder) {
             case ORDER_CODE -> {
-                OutputConsole.displayOrderComplete(order.getTotalPrice());
+                UserType userType = handleUserTypeSelection();
+
+                OutputConsole.displayOrderComplete(order.getDiscountPrice(userType));
                 order.removeOrder();
             }
             case MENU_CODE -> {
@@ -39,5 +42,22 @@ public class OrderService {
 
     public void removeOrder() {
         order.removeOrder();
+    }
+
+    private UserType handleUserTypeSelection() {
+        OutputConsole.displayUserDiscountInfo();
+        int userTypeNum = InputConsole.select();
+
+        if (userTypeNum == UserType.NATIONAL_MERIT.getCode()) {
+            return UserType.NATIONAL_MERIT;
+        } else if (userTypeNum == UserType.SOLDIER.getCode()) {
+            return UserType.SOLDIER;
+        } else if (userTypeNum == UserType.STUDENT.getCode()) {
+            return UserType.STUDENT;
+        } else if (userTypeNum == UserType.REGULAR.getCode()) {
+            return UserType.REGULAR;
+        } else {
+            throw new BadInputException(ExceptionMessage.INVALID_NUM);
+        }
     }
 }

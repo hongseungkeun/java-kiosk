@@ -26,4 +26,6 @@ public class ConsoleMessage {
     public static final String MENU_BUTTON = "2. 메뉴판";
     public static final String ADD_MENU = " 이(가) 장바구니에 추가되었습니다.";
     public static final String MOVE_TO_MENU = "아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.";
+    public static final String USER_DISCOUNT_INFO = "할인 정보를 입력해주세요.";
+
 }

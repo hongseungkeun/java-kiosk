@@ -20,6 +20,10 @@ public class Order {
                 .sum();
     }
 
+    public Double getDiscountPrice(UserType userType) {
+        return getTotalPrice() - (getTotalPrice() * userType.getDiscountRate());
+    }
+
     public void addOrder(Cart newCart) {
         carts.stream()
                 .filter(cart -> cart.getItemName().equals(newCart.getItemName()))

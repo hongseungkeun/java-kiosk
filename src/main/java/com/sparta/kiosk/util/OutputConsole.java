@@ -1,10 +1,8 @@
 package com.sparta.kiosk.util;
 
-import com.sparta.kiosk.domain.Cart;
-import com.sparta.kiosk.domain.Menu;
-import com.sparta.kiosk.domain.MenuItem;
-import com.sparta.kiosk.domain.Order;
+import com.sparta.kiosk.domain.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class OutputConsole {
@@ -17,6 +15,8 @@ public class OutputConsole {
     private static final String PRICE_SEPARATOR = SEPARATOR + PRICE;
     private static final String DOUBLE_QUOTATION_MART = "\"";
     private static final String HYPHEN = " - ";
+    private static final String COLON = " : ";
+    private static final String PERCENT = "%";
 
     private OutputConsole() {
     }
@@ -92,13 +92,23 @@ public class OutputConsole {
     }
 
     public static void displayOrderComplete(Double totalPrice) {
+        displayEmptyLine();
         displayMessage(ConsoleMessage.ORDER_COMPLETE + PRICE + totalPrice + ConsoleMessage.ORDER_COMPLETE_END);
         displayEmptyLine();
     }
 
     public static void displayCancelMenu() {
+        OutputConsole.displayEmptyLine();
         OutputConsole.displayMessage(ConsoleMessage.CANCEL_COMPLETE);
         OutputConsole.displayEmptyLine();
+    }
+
+    public static void displayUserDiscountInfo() {
+        displayEmptyLine();
+        OutputConsole.displayMessage(ConsoleMessage.USER_DISCOUNT_INFO);
+
+        Arrays.stream(UserType.values())
+                .forEach(type -> displayMessage(type.getCode() + DOT + type.getDescription() + COLON + type.getDiscountRate() * 100 + PERCENT));
     }
 
     public static void displayEmptyLine() {
